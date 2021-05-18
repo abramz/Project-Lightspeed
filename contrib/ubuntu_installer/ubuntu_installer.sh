@@ -23,9 +23,9 @@ lightspeed_config() {
     DEFAULT_IP_ADDRESS=$(curl ifconfig.co/)
 
     # Git repositories:
-    DEFAULT_INGEST_REPO=https://github.com/GRVYDEV/Lightspeed-ingest.git
-    DEFAULT_WEBRTC_REPO=https://github.com/GRVYDEV/Lightspeed-webrtc.git
-    DEFAULT_REACT_REPO=https://github.com/GRVYDEV/Lightspeed-react.git
+    DEFAULT_INGEST_REPO=https://github.com/abramz/Lightspeed-ingest.git
+    DEFAULT_WEBRTC_REPO=https://github.com/abramz/Lightspeed-webrtc.git
+    DEFAULT_REACT_REPO=https://github.com/abramz/Lightspeed-react.git
 
     # Git branch, tag, or commit to compile (default is HEAD from mainline branch):
     DEFAULT_INGEST_GIT_REF=main
@@ -149,7 +149,7 @@ After=network-online.target
 [Service]
 TimeoutStartSec=0
 Environment=IP_ADDRESS=${WEBRTC_IP_ADDRESS}
-ExecStart=/usr/local/bin/lightspeed-webrtc --addr=@@@{IP_ADDRESS}
+ExecStart=/usr/local/bin/lightspeed-webrtc --addr=@@@{IP_ADDRESS} --token-secret=@@@{TOKEN_SECRET} --origin=@@@{ALLOWED_ORIGIN} --strict-origin=@@@{STRICT_ORIGIN}
 Restart=always
 RestartSec=60
 

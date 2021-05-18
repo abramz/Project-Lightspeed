@@ -10,16 +10,16 @@ services to run them. This installation method does not use Docker.
 The script can be configured directly via environment variables. Here is a list
 of the variables that you can configure:
 
- * `TLS_ON` - if set `true`, nginx will use port 443 and run TLS encrypted HTTPs
-   services (html+websocket). Requests on port 80 will redirect to port 443. A
-   TLS certificate will be generated and signed by Let's Encrypt. You must also
-   set `DOMAIN` and `ACME_EMAIL`.
- * `DOMAIN` - The domain name you want to use for the stream website. This is
-   only required if `TLS_ON=true`.
- * `ACME_EMAIL` - Your email address, that you want to use to register with
-   Let's Encrypt. This is only required if `TLS_ON=true`.
- * `IP_ADDRESS` - The public IP address of the server. If you don't set this,
-   the script will try to find this automatically.
+- `TLS_ON` - if set `true`, nginx will use port 443 and run TLS encrypted HTTPs
+  services (html+websocket). Requests on port 80 will redirect to port 443. A
+  TLS certificate will be generated and signed by Let's Encrypt. You must also
+  set `DOMAIN` and `ACME_EMAIL`.
+- `DOMAIN` - The domain name you want to use for the stream website. This is
+  only required if `TLS_ON=true`.
+- `ACME_EMAIL` - Your email address, that you want to use to register with
+  Let's Encrypt. This is only required if `TLS_ON=true`.
+- `IP_ADDRESS` - The public IP address of the server. If you don't set this,
+  the script will try to find this automatically.
 
 If you set `TLS_ON=true` (https:// for the stream website), the stream website
 requires a domain name, and you need a personal email address to register with
@@ -48,18 +48,21 @@ Example with TLS (config is set as env vars):
 export TLS_ON=true
 export DOMAIN=stream.example.com
 export ACME_EMAIL=email@example.com
+export TOKEN_SECRET=your-32-bit-secret
+export ALLOWED_ORIGIN=your.domain.com,anotherdomain.net
+export STRICT_ORIGIN=true
 
-curl -L https://raw.githubusercontent.com/GRVYDEV/Project-Lightspeed/main/contrib/ubuntu_installer/ubuntu_installer.sh | sudo -E bash -xe
+curl -L https://raw.githubusercontent.com/abramz/Project-Lightspeed/main/contrib/ubuntu_installer/ubuntu_installer.sh | sudo -E bash -xe
 ```
 
 ## Get your stream key
 
 Once the script finishes, these new services will have been created:
 
- * `lightspeed-ingest`
- * `lightspeed-webrtc`
- * `nginx`
- 
+- `lightspeed-ingest`
+- `lightspeed-webrtc`
+- `nginx`
+
 In order to start streaming, you need the stream key, which is printed in the
 log for the `lightspeed-ingest` service. You can view the log this way:
 
@@ -75,16 +78,16 @@ create the server.
 You can use this on DigitalOcean, or any other cloud host that supports
 cloud-init. Here's the directions for DigitalOcean:
 
- * Create an account or sign in with your existing one.
- * [Create a new droplet](https://cloud.digitalocean.com/droplets/new)
- * Choose a plan. This is tested to work on the smallest $5 plan.
- * Choose `Ubuntu 20.04 (LTS) x64` (default)
- * Under `Select additional options` check the box `User data`.
- * Enter the install script in the text area marked `Enter user data here...`
- * You can use any of the same examples Run from above. Make sure to include the
-   first line `#!/bin/bash` and the exported variables you want (if any).
- * Review the rest of the droplet options and click Create Droplet.
- 
+- Create an account or sign in with your existing one.
+- [Create a new droplet](https://cloud.digitalocean.com/droplets/new)
+- Choose a plan. This is tested to work on the smallest $5 plan.
+- Choose `Ubuntu 20.04 (LTS) x64` (default)
+- Under `Select additional options` check the box `User data`.
+- Enter the install script in the text area marked `Enter user data here...`
+- You can use any of the same examples Run from above. Make sure to include the
+  first line `#!/bin/bash` and the exported variables you want (if any).
+- Review the rest of the droplet options and click Create Droplet.
+
 Now the droplet is being created. If you chose to set `TLS_ON=true`, you now
 need to copy the IP address of the new droplet, and create a DNS `A` record for
 your chosen `DOMAIN` (instructions vary depending on your domain DNS provider).
@@ -107,4 +110,3 @@ Using the `-w` argument, cloud-init will wait for the script to finish before
 printing anything. After waiting for the script to finish, it will print
 `status: done` or `status: error` depending on if the script ran successfully or
 not.
-
