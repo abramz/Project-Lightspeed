@@ -22,6 +22,12 @@ lightspeed_config() {
     # Or you can just set IP_ADDRESS=x.x.x.x
     DEFAULT_IP_ADDRESS=$(curl ifconfig.co/)
 
+    # All origins are accepted by default
+    DEFAULT_ALLOWED_ORIGIN="*"
+
+    # An origin header is not required by default
+    DEFAULT_STRICT_ORIGIN=false
+
     # Git repositories:
     DEFAULT_INGEST_REPO=https://github.com/abramz/Lightspeed-ingest.git
     DEFAULT_WEBRTC_REPO=https://github.com/abramz/Lightspeed-webrtc.git
@@ -42,6 +48,8 @@ lightspeed_install() {
     TLS_ON=${TLS_ON:-$DEFAULT_TLS_ON}
     DOMAIN=${DOMAIN:-$DEFAULT_DOMAIN}
     IP_ADDRESS=${IP_ADDRESS:-$DEFAULT_IP_ADDRESS}
+    STRICT_ORIGIN=${STRICT_ORIGIN:-$DEFAULT_STRICT_ORIGIN}
+    ALLOWED_ORIGIN=${ALLOWED_ORIGIN:-$DEFAULT_ALLOWED_ORIGIN}
     INGEST_REPO=${INGEST_REPO:-$DEFAULT_INGEST_REPO}
     WEBRTC_REPO=${WEBRTC_REPO:-$DEFAULT_WEBRTC_REPO}
     REACT_REPO=${REACT_REPO:-$DEFAULT_REACT_REPO}
@@ -149,7 +157,7 @@ After=network-online.target
 [Service]
 TimeoutStartSec=0
 Environment=IP_ADDRESS=${WEBRTC_IP_ADDRESS}
-ExecStart=/usr/local/bin/lightspeed-webrtc --addr=@@@{IP_ADDRESS} --token-secret=@@@{TOKEN_SECRET} --origin=@@@{ALLOWED_ORIGIN} --strict-origin=@@@{STRICT_ORIGIN}
+ExecStart=/usr/local/bin/lightspeed-webrtc --addr=@@@{IP_ADDRESS} --token-secret=${TOKEN_SECRET} --origin=${ALLOWED_ORIGIN} --strict-origin=${STRICT_ORIGIN}
 Restart=always
 RestartSec=60
 
